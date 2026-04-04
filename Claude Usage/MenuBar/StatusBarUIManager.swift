@@ -225,7 +225,7 @@ final class StatusBarUIManager {
 
             // Get usage data for this profile
             let usage = profile.claudeUsage ?? ClaudeUsage.empty
-            let showRemaining = profile.iconConfig.showRemainingPercentage
+            let showRemaining = config.showRemainingPercentage
 
             // Calculate percentages
             let sessionUsed = usage.effectiveSessionPercentage
