@@ -335,6 +335,17 @@
 "claudecode.button_reset" = "재설정";
 "claudecode.component_profile" = "프로필 이름";
 "claudecode.context_info" = "컨텍스트가 100% 대신 ~80-95%로 표시될 수 있습니다. Claude는 한도에 도달하기 전에 자동으로 압축하며, 출력 토큰도 컨텍스트 공간을 사용합니다.";
+"claudecode.element_colors_title" = "요소 색상";
+"claudecode.element_color_directory" = "디렉토리";
+"claudecode.element_color_branch" = "브랜치";
+"claudecode.element_color_model" = "모델";
+"claudecode.element_color_profile" = "프로필";
+"claudecode.element_color_context" = "컨텍스트";
+"claudecode.element_color_separator" = "구분자";
+"claudecode.element_color_usage" = "사용량 그라데이션";
+"claudecode.element_color_usage_desc" = "10단계 그라데이션을 고정 색상으로 대체";
+"claudecode.element_color_pace" = "페이스 마커";
+"claudecode.element_color_pace_desc" = "6단계 페이스 색상을 고정 색상으로 대체";
 "error.generic" = "오류: %@";
 "personal.button_saving" = "저장 중...";
 "personal.button_setup_wizard" = "설정 마법사";

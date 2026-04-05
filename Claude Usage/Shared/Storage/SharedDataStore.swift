@@ -35,6 +35,7 @@ class SharedDataStore {
         static let statuslineShowResetLabel = "statuslineShowResetLabel"
         static let statuslineColorMode = "statuslineColorMode"
         static let statuslineSingleColorHex = "statuslineSingleColorHex"
+        static let statuslineElementColors = "statuslineElementColors"
 
         // Setup State
         static let hasCompletedSetup = "hasCompletedSetup"
@@ -267,6 +268,24 @@ class SharedDataStore {
 
     func loadStatuslineSingleColorHex() -> String {
         return defaults.string(forKey: Keys.statuslineSingleColorHex) ?? "#00BFFF"
+    }
+
+    /// Persists per-element color configuration as JSON data.
+    /// - Parameter colors: The element colors to save.
+    func saveStatuslineElementColors(_ colors: StatuslineElementColors) {
+        if let data = try? JSONEncoder().encode(colors) {
+            defaults.set(data, forKey: Keys.statuslineElementColors)
+        }
+    }
+
+    /// Loads per-element color configuration. Returns defaults matching the ANSI
+    /// `.colored` palette if no configuration has been saved yet.
+    func loadStatuslineElementColors() -> StatuslineElementColors {
+        guard let data = defaults.data(forKey: Keys.statuslineElementColors),
+              let colors = try? JSONDecoder().decode(StatuslineElementColors.self, from: data) else {
+            return StatuslineElementColors()
+        }
+        return colors
     }
 
     // MARK: - Setup State

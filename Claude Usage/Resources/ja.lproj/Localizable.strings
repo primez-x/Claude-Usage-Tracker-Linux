@@ -482,6 +482,17 @@
 "claudecode.button_reset" = "リセット";
 "claudecode.component_profile" = "プロファイル名";
 "claudecode.context_info" = "コンテキストは100%ではなく約80-95%と表示される場合があります。Claudeは上限に達する前に自動圧縮を行い、出力トークンもコンテキスト領域を使用します。";
+"claudecode.element_colors_title" = "要素の色";
+"claudecode.element_color_directory" = "ディレクトリ";
+"claudecode.element_color_branch" = "ブランチ";
+"claudecode.element_color_model" = "モデル";
+"claudecode.element_color_profile" = "プロファイル";
+"claudecode.element_color_context" = "コンテキスト";
+"claudecode.element_color_separator" = "セパレータ";
+"claudecode.element_color_usage" = "使用量グラデーション";
+"claudecode.element_color_usage_desc" = "10段階のグラデーションを固定色で上書き";
+"claudecode.element_color_pace" = "ペースマーカー";
+"claudecode.element_color_pace_desc" = "6段階のペース色を固定色で上書き";
 "error.generic" = "エラー：%@";
 "personal.button_saving" = "保存中...";
 "personal.button_setup_wizard" = "セットアップウィザード";

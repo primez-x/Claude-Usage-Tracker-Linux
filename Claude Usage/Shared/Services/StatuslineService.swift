@@ -134,6 +134,14 @@ if [ -f "$config_file" ]; then
   show_profile=$SHOW_PROFILE
   profile_name="$PROFILE_NAME"
   pace_marker_step_colors=$PACE_MARKER_STEP_COLORS
+  element_color_dir=$ELEMENT_COLOR_DIR
+  element_color_branch=$ELEMENT_COLOR_BRANCH
+  element_color_model=$ELEMENT_COLOR_MODEL
+  element_color_profile=$ELEMENT_COLOR_PROFILE
+  element_color_context=$ELEMENT_COLOR_CONTEXT
+  element_color_separator=$ELEMENT_COLOR_SEPARATOR
+  element_color_usage=$ELEMENT_COLOR_USAGE
+  element_color_pace=$ELEMENT_COLOR_PACE
 else
   show_model=1
   show_dir=1
@@ -153,6 +161,14 @@ else
   show_profile=0
   profile_name=""
   pace_marker_step_colors=1
+  element_color_dir="#0000EE"
+  element_color_branch="#00BB00"
+  element_color_model="#BBBB00"
+  element_color_profile="#BB00BB"
+  element_color_context="#00BBBB"
+  element_color_separator="#808080"
+  element_color_usage=""
+  element_color_pace=""
 fi
 
 input=$(cat)
@@ -224,6 +240,58 @@ elif [ "$color_mode" = "singleColor" ]; then
   PACE_PRESSING=$single_ansi
   PACE_CRITICAL=$single_ansi
   PACE_RUNAWAY=$single_ansi
+elif [ "$color_mode" = "perElement" ]; then
+  # Per-element mode - each element uses its own user-defined color
+  BLUE=$(hex_to_ansi "$element_color_dir")
+  GREEN=$(hex_to_ansi "$element_color_branch")
+  YELLOW=$(hex_to_ansi "$element_color_model")
+  MAGENTA=$(hex_to_ansi "$element_color_profile")
+  CYAN=$(hex_to_ansi "$element_color_context")
+  GRAY=$(hex_to_ansi "$element_color_separator")
+
+  # Usage gradient: override all levels if a base color is set, else use standard gradient
+  if [ -n "$element_color_usage" ]; then
+    usage_override=$(hex_to_ansi "$element_color_usage")
+    LEVEL_1=$usage_override
+    LEVEL_2=$usage_override
+    LEVEL_3=$usage_override
+    LEVEL_4=$usage_override
+    LEVEL_5=$usage_override
+    LEVEL_6=$usage_override
+    LEVEL_7=$usage_override
+    LEVEL_8=$usage_override
+    LEVEL_9=$usage_override
+    LEVEL_10=$usage_override
+  else
+    LEVEL_1=$'\\033[38;5;22m'
+    LEVEL_2=$'\\033[38;5;28m'
+    LEVEL_3=$'\\033[38;5;34m'
+    LEVEL_4=$'\\033[38;5;100m'
+    LEVEL_5=$'\\033[38;5;142m'
+    LEVEL_6=$'\\033[38;5;178m'
+    LEVEL_7=$'\\033[38;5;172m'
+    LEVEL_8=$'\\033[38;5;166m'
+    LEVEL_9=$'\\033[38;5;160m'
+    LEVEL_10=$'\\033[38;5;124m'
+  fi
+
+  # Pace colors: override all tiers if a base color is set, else use standard 6-tier
+  if [ -n "$element_color_pace" ]; then
+    pace_override=$(hex_to_ansi "$element_color_pace")
+    PACE_COMFORTABLE=$pace_override
+    PACE_ON_TRACK=$pace_override
+    PACE_WARMING=$pace_override
+    PACE_PRESSING=$pace_override
+    PACE_CRITICAL=$pace_override
+    PACE_RUNAWAY=$pace_override
+  else
+    PACE_COMFORTABLE=$'\\033[38;5;34m'
+    PACE_ON_TRACK=$'\\033[38;5;37m'
+    PACE_WARMING=$'\\033[38;5;178m'
+    PACE_PRESSING=$'\\033[38;5;208m'
+    PACE_CRITICAL=$'\\033[38;5;160m'
+    PACE_RUNAWAY=$'\\033[38;5;135m'
+  fi
 else
   # Colored mode (default) - use full color palette
   BLUE=$'\\033[0;34m'
@@ -656,7 +724,11 @@ printf "%s\\n" "$output"
             colorModeString = "monochrome"
         case .singleColor:
             colorModeString = "singleColor"
+        case .perElement:
+            colorModeString = "perElement"
         }
+
+        let elementColors = SharedDataStore.shared.loadStatuslineElementColors()
 
         let config = """
 SHOW_MODEL=\(showModel ? "1" : "0")
@@ -677,6 +749,14 @@ COLOR_MODE=\(colorModeString)
 SINGLE_COLOR=\(singleColorHex)
 SHOW_PROFILE=\(showProfile ? "1" : "0")
 PROFILE_NAME="\(profileName)"
+ELEMENT_COLOR_DIR=\(elementColors.directoryHex)
+ELEMENT_COLOR_BRANCH=\(elementColors.branchHex)
+ELEMENT_COLOR_MODEL=\(elementColors.modelHex)
+ELEMENT_COLOR_PROFILE=\(elementColors.profileHex)
+ELEMENT_COLOR_CONTEXT=\(elementColors.contextHex)
+ELEMENT_COLOR_SEPARATOR=\(elementColors.separatorHex)
+ELEMENT_COLOR_USAGE=\(elementColors.usageBaseHex ?? "")
+ELEMENT_COLOR_PACE=\(elementColors.paceBaseHex ?? "")
 """
 
         try config.write(to: configPath, atomically: true, encoding: .utf8)

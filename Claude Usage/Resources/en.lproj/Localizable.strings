@@ -710,6 +710,17 @@
 "claudecode.actions_title" = "Actions";
 "claudecode.component_profile" = "Profile name";
 "claudecode.context_info" = "Context may show ~80-95% instead of 100% — Claude auto-compresses before the limit, and output tokens also use context space.";
+"claudecode.element_colors_title" = "Element Colors";
+"claudecode.element_color_directory" = "Directory";
+"claudecode.element_color_branch" = "Branch";
+"claudecode.element_color_model" = "Model";
+"claudecode.element_color_profile" = "Profile";
+"claudecode.element_color_context" = "Context";
+"claudecode.element_color_separator" = "Separator";
+"claudecode.element_color_usage" = "Usage gradient";
+"claudecode.element_color_usage_desc" = "Override 10-level gradient with a fixed color";
+"claudecode.element_color_pace" = "Pace marker";
+"claudecode.element_color_pace_desc" = "Override 6-tier pace colors with a fixed color";
 "error.generic" = "Error: %@";
 "personal.button_saving" = "Saving...";
 "personal.button_setup_wizard" = "Setup Wizard";

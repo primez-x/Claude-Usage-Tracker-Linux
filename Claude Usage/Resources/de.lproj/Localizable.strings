@@ -468,6 +468,17 @@
 "claudecode.button_reset" = "Zurücksetzen";
 "claudecode.component_profile" = "Profilname";
 "claudecode.context_info" = "Der Kontext kann ~80-95% statt 100% anzeigen — Claude komprimiert automatisch vor dem Limit, und Ausgabe-Tokens nutzen ebenfalls Kontextplatz.";
+"claudecode.element_colors_title" = "Elementfarben";
+"claudecode.element_color_directory" = "Verzeichnis";
+"claudecode.element_color_branch" = "Branch";
+"claudecode.element_color_model" = "Modell";
+"claudecode.element_color_profile" = "Profil";
+"claudecode.element_color_context" = "Kontext";
+"claudecode.element_color_separator" = "Trennzeichen";
+"claudecode.element_color_usage" = "Nutzungsverlauf";
+"claudecode.element_color_usage_desc" = "10-stufigen Farbverlauf durch eine feste Farbe ersetzen";
+"claudecode.element_color_pace" = "Tempo-Markierung";
+"claudecode.element_color_pace_desc" = "6-Stufen-Tempofarben durch eine feste Farbe ersetzen";
 "error.generic" = "Fehler: %@";
 "personal.button_saving" = "Speichern...";
 "personal.button_setup_wizard" = "Einrichtungsassistent";

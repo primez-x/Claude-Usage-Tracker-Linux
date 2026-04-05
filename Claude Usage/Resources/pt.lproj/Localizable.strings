@@ -466,6 +466,17 @@
 "claudecode.button_reset" = "Redefinir";
 "claudecode.component_profile" = "Nome do perfil";
 "claudecode.context_info" = "O contexto pode mostrar ~80-95% em vez de 100% — o Claude comprime automaticamente antes do limite, e os tokens de saída também usam espaço de contexto.";
+"claudecode.element_colors_title" = "Cores dos Elementos";
+"claudecode.element_color_directory" = "Diretório";
+"claudecode.element_color_branch" = "Ramo";
+"claudecode.element_color_model" = "Modelo";
+"claudecode.element_color_profile" = "Perfil";
+"claudecode.element_color_context" = "Contexto";
+"claudecode.element_color_separator" = "Separador";
+"claudecode.element_color_usage" = "Gradiente de uso";
+"claudecode.element_color_usage_desc" = "Substitui o gradiente de 10 níveis por uma cor fixa";
+"claudecode.element_color_pace" = "Marcador de ritmo";
+"claudecode.element_color_pace_desc" = "Substitui os 6 níveis de cores de ritmo por uma cor fixa";
 "error.generic" = "Erro: %@";
 "personal.button_saving" = "Salvando...";
 "personal.button_setup_wizard" = "Assistente de Configuração";

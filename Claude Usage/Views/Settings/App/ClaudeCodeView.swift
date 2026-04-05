@@ -31,6 +31,8 @@ struct ClaudeCodeView: View {
     // Appearance settings
     @State private var colorMode: StatuslineColorMode = SharedDataStore.shared.loadStatuslineColorMode()
     @State private var singleColor: Color = Color(hex: SharedDataStore.shared.loadStatuslineSingleColorHex()) ?? .cyan
+    @State private var elementColors: StatuslineElementColors = SharedDataStore.shared.loadStatuslineElementColors()
+    @State private var elementColorsExpanded: Bool = false
 
     // Status feedback
     @State private var statusMessage: String?
@@ -89,7 +91,7 @@ struct ClaudeCodeView: View {
                     subtitle: "Choose color display mode"
                 ) {
                     HStack(spacing: DesignTokens.Spacing.small) {
-                        ForEach([StatuslineColorMode.colored, .monochrome, .singleColor], id: \.self) { mode in
+                        ForEach([StatuslineColorMode.colored, .monochrome, .singleColor, .perElement], id: \.self) { mode in
                             Button {
                                 colorMode = mode
                                 SharedDataStore.shared.saveStatuslineColorMode(mode)
@@ -141,6 +143,41 @@ struct ClaudeCodeView: View {
                             Spacer()
                         }
                         .padding(.top, 4)
+                    }
+
+                    if colorMode == .perElement {
+                        DisclosureGroup(isExpanded: $elementColorsExpanded) {
+                            VStack(alignment: .leading, spacing: DesignTokens.Spacing.small) {
+                                ElementColorRow(label: "Directory", hex: $elementColors.directoryHex)
+                                ElementColorRow(label: "Branch", hex: $elementColors.branchHex)
+                                ElementColorRow(label: "Model", hex: $elementColors.modelHex)
+                                ElementColorRow(label: "Profile", hex: $elementColors.profileHex)
+                                ElementColorRow(label: "Context", hex: $elementColors.contextHex)
+                                ElementColorRow(label: "Separator", hex: $elementColors.separatorHex)
+
+                                Divider()
+
+                                ElementColorRowOptional(
+                                    label: "Usage gradient",
+                                    description: "Override 10-level gradient with a fixed color",
+                                    hex: $elementColors.usageBaseHex
+                                )
+                                ElementColorRowOptional(
+                                    label: "Pace marker",
+                                    description: "Override 6-tier pace colors with a fixed color",
+                                    hex: $elementColors.paceBaseHex
+                                )
+                            }
+                            .padding(.top, DesignTokens.Spacing.small)
+                        } label: {
+                            Text("Element Colors")
+                                .font(DesignTokens.Typography.body)
+                                .foregroundColor(.primary)
+                        }
+                        .padding(.top, 4)
+                        .onChange(of: elementColors) {
+                            SharedDataStore.shared.saveStatuslineElementColors(elementColors)
+                        }
                     }
                 }
 
@@ -332,6 +369,8 @@ struct ClaudeCodeView: View {
         case .singleColor:
             let hex = SharedDataStore.shared.loadStatuslineSingleColorHex()
             return Color(hex: hex) ?? .cyan
+        case .perElement:
+            return Color(hex: elementColors.directoryHex) ?? TerminalColors.blue
         }
     }
 
@@ -339,7 +378,7 @@ struct ClaudeCodeView: View {
     private var previewBackgroundColor: Color {
         let colorMode = SharedDataStore.shared.loadStatuslineColorMode()
         switch colorMode {
-        case .colored:
+        case .colored, .perElement:
             return Color.purple.opacity(0.05)
         case .monochrome:
             return previewColor.opacity(0.05)
@@ -352,7 +391,7 @@ struct ClaudeCodeView: View {
     private var previewBorderColor: Color {
         let colorMode = SharedDataStore.shared.loadStatuslineColorMode()
         switch colorMode {
-        case .colored:
+        case .colored, .perElement:
             return Color.purple.opacity(0.2)
         case .monochrome:
             return previewColor.opacity(0.2)
@@ -361,12 +400,28 @@ struct ClaudeCodeView: View {
         }
     }
 
+    // Per-element preview colors — read from elementColors state for live updates
+    private var previewDirectoryColor: Color { Color(hex: elementColors.directoryHex) ?? TerminalColors.blue }
+    private var previewBranchColor: Color    { Color(hex: elementColors.branchHex) ?? TerminalColors.green }
+    private var previewModelColor: Color     { Color(hex: elementColors.modelHex) ?? TerminalColors.yellow }
+    private var previewProfileColor: Color   { Color(hex: elementColors.profileHex) ?? TerminalColors.magenta }
+    private var previewContextColor: Color   { Color(hex: elementColors.contextHex) ?? TerminalColors.cyan }
+    private var previewSeparatorColor: Color { Color(hex: elementColors.separatorHex) ?? TerminalColors.gray }
+    private func previewUsageColor(percentage: Int) -> Color {
+        if let hex = elementColors.usageBaseHex { return Color(hex: hex) ?? TerminalColors.usageLevel(percentage) }
+        return TerminalColors.usageLevel(percentage)
+    }
+    private func previewPaceOverrideColor(percentage: Int) -> Color? {
+        if let hex = elementColors.paceBaseHex { return Color(hex: hex) }
+        return nil
+    }
+
     /// Preview view showing statusline with appropriate colors
     @ViewBuilder
     private var previewView: some View {
         let colorMode = SharedDataStore.shared.loadStatuslineColorMode()
 
-        if colorMode == .colored {
+        if colorMode == .colored || colorMode == .perElement {
             // Multi-color preview - each element gets its own color
             multiColorPreview
         } else {
@@ -445,43 +500,51 @@ struct ClaudeCodeView: View {
         }
     }
 
-    /// Multi-color preview showing each element in different colors
+    /// Multi-color preview showing each element in different colors.
+    /// Used for both `.colored` and `.perElement` modes.
     private var multiColorPreview: some View {
         let usage = profileManager.activeProfile?.claudeUsage
         let percentage = usage != nil ? Int(usage!.sessionPercentage) : 29
-        let usageColor = TerminalColors.usageLevel(percentage)
+        let isPerElement = colorMode == .perElement
+        let dirColor    = isPerElement ? previewDirectoryColor : TerminalColors.blue
+        let branchColor = isPerElement ? previewBranchColor    : TerminalColors.green
+        let modelColor  = isPerElement ? previewModelColor     : TerminalColors.yellow
+        let profColor   = isPerElement ? previewProfileColor   : TerminalColors.magenta
+        let ctxColor    = isPerElement ? previewContextColor   : TerminalColors.cyan
+        let sepColor    = isPerElement ? previewSeparatorColor : TerminalColors.gray
+        let usageColor  = isPerElement ? previewUsageColor(percentage: percentage) : TerminalColors.usageLevel(percentage)
 
         return HStack(spacing: 0) {
             if showDirectory {
                 Text("claude-usage")
-                    .foregroundColor(TerminalColors.blue)
+                    .foregroundColor(dirColor)
                 if showBranch || showModel || showProfile || showContext || showUsage {
-                    Text(" │ ").foregroundColor(TerminalColors.gray)
+                    Text(" │ ").foregroundColor(sepColor)
                 }
             }
 
             if showBranch {
                 Text("⎇ main")
-                    .foregroundColor(TerminalColors.green)
+                    .foregroundColor(branchColor)
                 if showModel || showProfile || showContext || showUsage {
-                    Text(" │ ").foregroundColor(TerminalColors.gray)
+                    Text(" │ ").foregroundColor(sepColor)
                 }
             }
 
             if showModel {
                 Text("Opus")
-                    .foregroundColor(TerminalColors.yellow)
+                    .foregroundColor(modelColor)
                 if showProfile || showContext || showUsage {
-                    Text(" │ ").foregroundColor(TerminalColors.gray)
+                    Text(" │ ").foregroundColor(sepColor)
                 }
             }
 
             if showProfile {
                 let name = ProfileManager.shared.activeProfile?.name ?? "Profile"
                 Text(name)
-                    .foregroundColor(TerminalColors.magenta)
+                    .foregroundColor(profColor)
                 if showContext || showUsage {
-                    Text(" │ ").foregroundColor(TerminalColors.gray)
+                    Text(" │ ").foregroundColor(sepColor)
                 }
             }
 
@@ -489,13 +552,13 @@ struct ClaudeCodeView: View {
                 let ctxPrefix = showContextLabel ? "Ctx: " : ""
                 if contextAsTokens {
                     Text("\(ctxPrefix)96K")
-                        .foregroundColor(TerminalColors.cyan)
+                        .foregroundColor(ctxColor)
                 } else {
                     Text("\(ctxPrefix)48%")
-                        .foregroundColor(TerminalColors.cyan)
+                        .foregroundColor(ctxColor)
                 }
                 if showUsage {
-                    Text(" │ ").foregroundColor(TerminalColors.gray)
+                    Text(" │ ").foregroundColor(sepColor)
                 }
             }
 
@@ -510,7 +573,8 @@ struct ClaudeCodeView: View {
 
                     if showPaceMarker {
                         let markerPos = max(0, min(9, previewMarkerPosition))
-                        let paceColor = previewPaceColor(percentage: percentage)
+                        let basePaceColor = previewPaceColor(percentage: percentage)
+                        let paceColor = (isPerElement ? previewPaceOverrideColor(percentage: percentage) : nil) ?? basePaceColor
                         let fullBar = String(repeating: "▓", count: filledBlocks) + String(repeating: "░", count: emptyBlocks)
                         let chars = Array(fullBar)
 
@@ -577,6 +641,8 @@ struct ClaudeCodeView: View {
             return .primary
         case .singleColor:
             return singleColor
+        case .perElement:
+            return Color(hex: elementColors.directoryHex) ?? .purple
         }
     }
 
@@ -769,6 +835,71 @@ struct ClaudeCodeView: View {
         }
 
         return parts.isEmpty ? "claudecode.preview_no_components".localized : parts.joined(separator: " │ ")
+    }
+}
+
+// MARK: - Per-Element Color Rows
+
+/// A single row showing a label and a `ColorPicker` for a required statusline element color.
+///
+/// Used inside the "Element Colors" disclosure group in `ClaudeCodeView`
+/// when `StatuslineColorMode` is `.perElement`.
+private struct ElementColorRow: View {
+    let label: String
+    @Binding var hex: String
+
+    var body: some View {
+        HStack {
+            Text(label)
+                .font(DesignTokens.Typography.body)
+                .foregroundColor(.primary)
+            Spacer()
+            ColorPicker("", selection: Binding(
+                get: { Color(hex: hex) ?? .blue },
+                set: { hex = $0.toHex() ?? hex }
+            ))
+            .labelsHidden()
+        }
+    }
+}
+
+/// A row with a toggle and an optional `ColorPicker` for a statusline element
+/// that supports dynamic multi-level coloring (usage gradient, pace tiers).
+///
+/// When the toggle is off the binding value is `nil`, which tells the bash script
+/// to use the default dynamic behavior (10-level gradient or 6-tier pace colors).
+/// When on, the chosen color overrides all levels with a single fixed color.
+private struct ElementColorRowOptional: View {
+    let label: String
+    let description: String
+    @Binding var hex: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack {
+                Toggle(isOn: Binding(
+                    get: { hex != nil },
+                    set: { enabled in hex = enabled ? "#00BB00" : nil }
+                )) {
+                    Text(label)
+                        .font(DesignTokens.Typography.body)
+                        .foregroundColor(.primary)
+                }
+                .toggleStyle(.switch)
+
+                if hex != nil {
+                    Spacer()
+                    ColorPicker("", selection: Binding(
+                        get: { Color(hex: hex!) ?? .green },
+                        set: { hex = $0.toHex() ?? hex }
+                    ))
+                    .labelsHidden()
+                }
+            }
+            Text(description)
+                .font(DesignTokens.Typography.caption)
+                .foregroundColor(.secondary)
+        }
     }
 }
 
