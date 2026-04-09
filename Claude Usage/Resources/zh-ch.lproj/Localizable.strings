@@ -29,6 +29,7 @@
 "common.validate" = "验证";
 "common.yes" = "是";
 "common.no" = "否";
+"common.retry" = "重试";
 
 /* ==================== */
 /* MARK: - Settings Navigation */
@@ -67,6 +68,12 @@
 "menubar.all_models" = "所有模型";
 "menubar.weekly" = "每周";
 "menubar.anthropic_console" = "Anthropic API 控制台";
+"menubar.api_cost" = "API 费用";
+"menubar.cost_source.api" = "API";
+"menubar.cost_source.cli" = "Claude Code";
+"menubar.cost_source.unknown" = "其他";
+"menubar.this_month" = "本月";
+"menubar.total" = "总计";
 "menubar.used" = "已使用";
 "menubar.remaining" = "剩余";
 "menubar.resets_time" = "重置时间 %@";
@@ -161,6 +168,7 @@
 "about.created_by" = "创建者";
 "about.contributors" = "贡献者 (%d)";
 "about.contributors_loading" = "贡献者";
+"about.contributors_failed" = "无法加载贡献者";
 "about.links" = "链接";
 "about.star_github" = "在 GitHub 上标星";
 "about.report_issue" = "报告问题";
@@ -517,6 +525,10 @@
 "multiprofile.active_badge" = "活动";
 "multiprofile.at_least_one" = "至少必须选择一个配置文件";
 "multiprofile.icon_style" = "图标样式";
+"multiprofile.style_circles" = "圆圈";
+"multiprofile.style_bars" = "条形";
+"multiprofile.style_dots" = "圆点";
+"multiprofile.style_percent" = "百分比";
 "multiprofile.show_week" = "显示每周使用量";
 "multiprofile.show_week_description" = "除了会话使用量外，还显示每周使用量";
 "multiprofile.show_label" = "显示配置文件标签";
