@@ -154,6 +154,7 @@
 				de,
 				it,
 				pt,
+				"pt-BR",
 				ja,
 				ko,
 				uk,
