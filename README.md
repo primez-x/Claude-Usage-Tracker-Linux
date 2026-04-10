@@ -130,7 +130,23 @@ Or use the built-in automatic update feature (Settings → Updates).
 brew uninstall --cask claude-usage-tracker
 ```
 
-#### Option 2: Direct Download
+#### Option 2: Nix
+
+Test the app:
+
+```bash
+nix-shell -p claude-usage-tracker
+```
+
+Install it using home-manager:
+
+```nix
+home.packages = with pkgs; [
+  claude-usage-tracker
+];
+```
+
+#### Option 3: Direct Download
 
 **[Download Claude-Usage.zip](https://github.com/hamed-elfayome/Claude-Usage-Tracker/releases/latest/download/Claude-Usage.zip)**
 
@@ -143,7 +159,7 @@ brew uninstall --cask claude-usage-tracker
 
 **Automatic Updates**: Once installed, the app will automatically check for updates and notify you when new versions are available (Settings → Updates).
 
-#### Option 3: Build from Source
+#### Option 4: Build from Source
 
 ```bash
 # Clone the repository
