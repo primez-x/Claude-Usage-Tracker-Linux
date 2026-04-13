@@ -42,6 +42,9 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         // `menuBarManager` reference even if the wizard never visibly opens.
         menuBarManager = MenuBarManager()
 
+        // Start 24-hour heartbeat ping to track active app usage
+        HeartbeatService.shared.start()
+
         if !shouldShowSetupWizard() {
             // Initialize menu bar with active profile
             menuBarManager?.setup()
