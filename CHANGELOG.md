@@ -36,6 +36,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Ukrainian (Ukrainska)**: Full translation, including missing keys and corrected region code (`ua` -> `uk`)
 - Language count increased from 9 to 12
 
+### Peak Hours Indicator
+
+- **Peak Hours Detection**: A flame icon appears in the menu bar during Anthropic's peak hours (weekdays 5–11 AM PT), with a popover showing end time and countdown in your local timezone
+- Configurable via Settings — enable or disable the indicator per preference
+
 ### Analytics
 
 - **24-Hour Heartbeat Ping**: Anonymous heartbeat sent once every 24 hours to track active app usage — payload contains only app version, no PII or credentials
