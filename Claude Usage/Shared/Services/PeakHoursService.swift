@@ -9,7 +9,7 @@ final class PeakHoursService: ObservableObject {
     // MARK: - Peak Window Configuration (single source of truth)
     // Change these if Anthropic updates the peak hours window.
     static let peakStartHour = 5   // 5:00 AM PT
-    static let peakEndHour   = 22  // 11:00 AM PT (exclusive)
+    static let peakEndHour   = 11  // 11:00 AM PT (exclusive)
     static let peakTimeZone  = TimeZone(identifier: "America/Los_Angeles")!
 
     @Published private(set) var isPeakHours: Bool = false
