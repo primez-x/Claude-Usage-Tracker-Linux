@@ -226,7 +226,8 @@ class MenuBarManager: NSObject, ObservableObject {
 
         // Start peak hours service and indicator
         PeakHoursService.shared.start()
-        if SharedDataStore.shared.loadPeakHoursIndicatorEnabled() {
+        let store = SharedDataStore.shared
+        if store.loadPeakHoursIndicatorEnabled() && store.loadPeakHoursMenuIconEnabled() {
             statusBarUIManager?.setupPeakHoursIndicator(target: self, action: #selector(togglePeakHoursPopover))
         }
         observePeakHoursSettingChanges()
@@ -847,7 +848,8 @@ class MenuBarManager: NSObject, ObservableObject {
             queue: .main
         ) { [weak self] _ in
             guard let self = self else { return }
-            if SharedDataStore.shared.loadPeakHoursIndicatorEnabled() {
+            let store = SharedDataStore.shared
+            if store.loadPeakHoursIndicatorEnabled() && store.loadPeakHoursMenuIconEnabled() {
                 self.statusBarUIManager?.setupPeakHoursIndicator(
                     target: self, action: #selector(self.togglePeakHoursPopover)
                 )

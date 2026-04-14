@@ -75,6 +75,7 @@ class SharedDataStore {
         static let popoverTimeDisplay = "popoverTimeDisplay"
         static let timeFormatPreference = "timeFormatPreference"
         static let peakHoursIndicatorEnabled = "peakHoursIndicatorEnabled"
+        static let peakHoursMenuIconEnabled = "peakHoursMenuIconEnabled"
     }
 
     init() {
@@ -628,6 +629,17 @@ class SharedDataStore {
             return false
         }
         return defaults.bool(forKey: Keys.peakHoursIndicatorEnabled)
+    }
+
+    func savePeakHoursMenuIconEnabled(_ enabled: Bool) {
+        defaults.set(enabled, forKey: Keys.peakHoursMenuIconEnabled)
+    }
+
+    func loadPeakHoursMenuIconEnabled() -> Bool {
+        if defaults.object(forKey: Keys.peakHoursMenuIconEnabled) == nil {
+            return true
+        }
+        return defaults.bool(forKey: Keys.peakHoursMenuIconEnabled)
     }
 
     // MARK: - Testing Helpers
