@@ -132,6 +132,10 @@
 "multiprofile.active_badge" = "활성";
 "multiprofile.at_least_one" = "최소한 하나의 프로필이 선택되어야 합니다";
 "multiprofile.icon_style" = "아이콘 스타일";
+"multiprofile.style_circles" = "원";
+"multiprofile.style_bars" = "막대";
+"multiprofile.style_dots" = "점";
+"multiprofile.style_percent" = "퍼센트";
 "multiprofile.show_week" = "주간 사용량 표시";
 "multiprofile.show_week_description" = "세션 외에 주간 사용량 표시";
 "multiprofile.show_label" = "프로필 이름 표시";

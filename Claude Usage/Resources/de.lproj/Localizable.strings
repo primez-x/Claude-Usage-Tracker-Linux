@@ -547,6 +547,10 @@
 "multiprofile.active_badge" = "Aktiv";
 "multiprofile.at_least_one" = "Mindestens ein Profil muss ausgewählt sein";
 "multiprofile.icon_style" = "Icon-Stil";
+"multiprofile.style_circles" = "Kreise";
+"multiprofile.style_bars" = "Balken";
+"multiprofile.style_dots" = "Punkte";
+"multiprofile.style_percent" = "Prozent";
 "multiprofile.show_week" = "Wochennutzung anzeigen";
 "multiprofile.show_week_description" = "Wöchentliche Nutzung zusätzlich zur Sitzung anzeigen";
 "multiprofile.show_label" = "Profilname anzeigen";

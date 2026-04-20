@@ -547,6 +547,10 @@
 "multiprofile.active_badge" = "アクティブ";
 "multiprofile.at_least_one" = "少なくとも1つのプロファイルを選択する必要があります";
 "multiprofile.icon_style" = "アイコンスタイル";
+"multiprofile.style_circles" = "サークル";
+"multiprofile.style_bars" = "バー";
+"multiprofile.style_dots" = "ドット";
+"multiprofile.style_percent" = "パーセント";
 "multiprofile.show_week" = "週間使用量を表示";
 "multiprofile.show_week_description" = "セッションに加えて週間使用量を表示";
 "multiprofile.show_label" = "プロファイル名を表示";
