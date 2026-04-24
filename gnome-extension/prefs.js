@@ -57,7 +57,7 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
         let child = group.get_first_child();
         while (child) {
             const next = child.get_next_sibling();
-            child.unparent();
+            group.remove(child);
             child = next;
         }
     }
