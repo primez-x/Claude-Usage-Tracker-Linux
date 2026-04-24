@@ -204,7 +204,7 @@ export class ProfileManager {
                 if (!ok) continue;
                 const text = new TextDecoder('utf-8').decode(contents.get_data ? contents.get_data() : contents);
                 const json = JSON.parse(text);
-                if (json.access_token || json.credentials) {
+                if (json.access_token || json.credentials || json.claudeAiOauth?.accessToken) {
                     await this.setCLICredentials(profile, text);
                     // Try to capture oauthAccount from .claude.json
                     if (json.oauthAccount) {
