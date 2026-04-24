@@ -1,13 +1,48 @@
-// GSettings wrapper
+// GSettings wrapper that loads schema from the extension directory
 
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 export class ExtensionSettings {
     constructor() {
-        this._settings = new Gio.Settings({
-            schema_id: 'org.gnome.shell.extensions.claude-usage-tracker'
-        });
+        this._settings = this._loadSettings();
+    }
+
+    _loadSettings() {
+        // Derive the extension root directory from this file's location
+        // settings.js is at: <extension-root>/lib/settings.js
+        const currentFile = import.meta.url.replace('file://', '');
+        const libDir = GLib.path_get_dirname(currentFile);
+        const extensionDir = GLib.path_get_dirname(libDir);
+        const schemasDir = GLib.build_filenamev([extensionDir, 'schemas']);
+
+        // Try loading from the extension's schemas directory first
+        if (GLib.file_test(schemasDir, GLib.FileTest.IS_DIR)) {
+            try {
+                const schemaSource = Gio.SettingsSchemaSource.new_from_directory(
+                    schemasDir,
+                    Gio.SettingsSchemaSource.get_default(),
+                    false
+                );
+                const schema = schemaSource.lookup('org.gnome.shell.extensions.claude-usage-tracker', true);
+                if (schema) {
+                    return new Gio.Settings({ settings_schema: schema });
+                }
+            } catch (e) {
+                log(`ClaudeUsage: Failed to load schema from ${schemasDir}: ${e.message}`);
+            }
+        }
+
+        // Fallback to global schema registry (for system installs)
+        try {
+            return new Gio.Settings({ schema_id: 'org.gnome.shell.extensions.claude-usage-tracker' });
+        } catch (e) {
+            throw new Error(
+                `GSettings schema org.gnome.shell.extensions.claude-usage-tracker not found. ` +
+                `Ensure schemas/gschemas.compiled exists in the extension directory. ` +
+                `Run: glib-compile-schemas schemas/`
+            );
+        }
     }
 
     get refreshInterval() { return this._settings.get_int('refresh-interval'); }
