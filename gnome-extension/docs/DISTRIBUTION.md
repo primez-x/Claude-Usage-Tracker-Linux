@@ -23,7 +23,7 @@ EGO expects a minimal zip without dev/build files:
 ```bash
 cd gnome-extension
 make release
-# Creates: claude-usage-tracker@hamed-elfayome.github.io.ego.zip
+# Creates: claude-usage-tracker@primez-x.github.io.ego.zip
 ```
 
 ### Step 2: Create an EGO account
@@ -39,7 +39,7 @@ make release
 3. Fill in the form:
    - **Name**: Claude Usage Tracker
    - **Description**: Real-time Claude AI usage monitoring in your GNOME panel. Track session, weekly, Opus, and Sonnet usage with multi-profile support.
-   - **URL**: `https://github.com/hamed-elfayome/Claude-Usage-Tracker`
+   - **URL**: `https://github.com/primez-x/Claude-Usage-Tracker-Linux`
    - **Current version**: `1`
    - **Shell version**: `50`
 4. Upload at least 1 screenshot (PNG/JPG, max 1MB, 16:9 or 4:3 ratio)
@@ -99,7 +99,7 @@ cd gnome-extension
 make release
 
 # 3. Go to GitHub → Releases → Draft a new release
-# 4. Attach claude-usage-tracker@hamed-elfayome.github.io.ego.zip
+# 4. Attach claude-usage-tracker@primez-x.github.io.ego.zip
 # 5. Publish
 ```
 
@@ -121,7 +121,7 @@ For testing or development:
 cd gnome-extension
 make install
 # Then restart GNOME Shell (Alt+F2 → r on X11, or log out/in on Wayland)
-gnome-extensions enable claude-usage-tracker@hamed-elfayome.github.io
+gnome-extensions enable claude-usage-tracker@primez-x.github.io
 ```
 
 To uninstall:

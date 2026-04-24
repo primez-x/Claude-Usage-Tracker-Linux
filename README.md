@@ -200,7 +200,7 @@ Once the extension is published to extensions.gnome.org:
 
 #### Option 2: Install from GitHub Release
 
-1. Download `claude-usage-tracker@hamed-elfayome.github.io.ego.zip` from the [latest release](https://github.com/hamed-elfayome/Claude-Usage-Tracker/releases/latest)
+1. Download `claude-usage-tracker@primez-x.github.io.ego.zip` from the [latest release](https://github.com/primez-x/Claude-Usage-Tracker-Linux/releases/latest)
 2. Open **Extension Manager**
 3. Click **+** (Install from File)
 4. Select the downloaded `.zip`
@@ -209,8 +209,8 @@ Once the extension is published to extensions.gnome.org:
 #### Option 3: Manual install from source
 
 ```bash
-git clone https://github.com/hamed-elfayome/Claude-Usage-Tracker.git
-cd Claude-Usage-Tracker/gnome-extension
+git clone https://github.com/primez-x/Claude-Usage-Tracker-Linux.git
+cd Claude-Usage-Tracker-Linux/gnome-extension
 make install
 ```
 
@@ -220,7 +220,7 @@ Then restart GNOME Shell:
 
 Finally, enable the extension:
 ```bash
-gnome-extensions enable claude-usage-tracker@hamed-elfayome.github.io
+gnome-extensions enable claude-usage-tracker@primez-x.github.io
 ```
 
 **To uninstall**:
@@ -234,7 +234,7 @@ make uninstall
 ```bash
 cd Claude-Usage-Tracker/gnome-extension
 make release
-# Produces: claude-usage-tracker@hamed-elfayome.github.io.ego.zip
+# Produces: claude-usage-tracker@primez-x.github.io.ego.zip
 ```
 
 ### Linux Configuration
@@ -897,7 +897,7 @@ If automatic updates aren't working:
 ### Linux / GNOME Specific
 
 **Extension not appearing in panel after install**
-- Ensure the extension is enabled: `gnome-extensions enable claude-usage-tracker@hamed-elfayome.github.io`
+- Ensure the extension is enabled: `gnome-extensions enable claude-usage-tracker@primez-x.github.io`
 - Restart GNOME Shell: `Alt+F2` → type `r` → Enter (X11 only) or log out/in (Wayland)
 - Check GNOME Logs: `journalctl -f -o cat /usr/bin/gnome-shell` and look for "ClaudeUsage" messages
 

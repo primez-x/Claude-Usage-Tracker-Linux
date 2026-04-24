@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-UUID="claude-usage-tracker@hamed-elfayome.github.io"
+UUID="claude-usage-tracker@primez-x.github.io"
 EXTENSION_DIR="$HOME/.local/share/gnome-shell/extensions/$UUID"
 
 echo "Claude Usage Tracker - GNOME Shell Extension Installer"

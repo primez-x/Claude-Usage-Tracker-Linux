@@ -1,6 +1,6 @@
 # Claude Usage Tracker - GNOME Shell Extension Makefile
 
-UUID = claude-usage-tracker@hamed-elfayome.github.io
+UUID = claude-usage-tracker@primez-x.github.io
 EXTENSION_DIR = $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 SCHEMA = schemas/org.gnome.shell.extensions.claude-usage-tracker.gschema.xml
 
