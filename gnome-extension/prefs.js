@@ -31,40 +31,42 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
     _buildProfilesPage() {
         const page = new Adw.PreferencesPage({ title: 'Profiles', icon_name: 'user-info-symbolic' });
 
-        // Active profile group
+        // Profile list group (dynamic)
         this._profileGroup = new Adw.PreferencesGroup({ title: 'Profiles' });
-        this._refreshProfileList();
         page.add(this._profileGroup);
+        this._refreshProfileList();
 
-        // Add profile
+        // Add profile button (static, separate group)
+        const addGroup = new Adw.PreferencesGroup({ title: '' });
         const addRow = new Adw.ActionRow({ title: '' });
         const addBtn = new Gtk.Button({ label: 'Add Profile', valign: Gtk.Align.CENTER });
         addBtn.connect('clicked', () => this._onAddProfile());
         addRow.add_suffix(addBtn);
-        this._profileGroup.add(addRow);
+        addGroup.add(addRow);
+        page.add(addGroup);
 
-        // Credentials group for active profile
+        // Credentials group for active profile (dynamic)
         this._credentialsGroup = new Adw.PreferencesGroup({ title: 'Credentials' });
-        this._buildCredentialsSection();
         page.add(this._credentialsGroup);
+        this._buildCredentialsSection();
 
         this._window.add(page);
     }
 
-    _refreshProfileList() {
-        // Remove old profile rows (keep the Add button row which is last)
-        let child = this._profileGroup.get_first_child();
-        const toRemove = [];
+    _clearGroup(group) {
+        let child = group.get_first_child();
         while (child) {
-            if (child._isProfileRow) toRemove.push(child);
-            child = child.get_next_sibling();
+            const next = child.get_next_sibling();
+            child.unparent();
+            child = next;
         }
-        for (const c of toRemove) this._profileGroup.remove(c);
+    }
+
+    _refreshProfileList() {
+        this._clearGroup(this._profileGroup);
 
         for (const profile of this._profileManager.profiles) {
             const row = new Adw.ActionRow({ title: profile.name });
-            row._isProfileRow = true;
-            row._profile = profile;
 
             if (profile === this._profileManager.activeProfile) {
                 row.add_suffix(new Gtk.Label({ label: 'Active', css_classes: ['dim-label'] }));
@@ -91,19 +93,12 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
                 row.add_suffix(deleteBtn);
             }
 
-            this._profileGroup.insert_child_after(row, null);
+            this._profileGroup.add(row);
         }
     }
 
     _buildCredentialsSection() {
-        // Clear old credentials rows
-        let child = this._credentialsGroup.get_first_child();
-        const toRemove = [];
-        while (child) {
-            toRemove.push(child);
-            child = child.get_next_sibling();
-        }
-        for (const c of toRemove) this._credentialsGroup.remove(c);
+        this._clearGroup(this._credentialsGroup);
 
         const profile = this._profileManager.activeProfile;
         if (!profile) return;

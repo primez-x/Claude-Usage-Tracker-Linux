@@ -1,24 +1,41 @@
 // Credential storage using libsecret with file fallback
 
-import Secret from 'gi://Secret';
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
-
-const SCHEMA = new Secret.Schema(
-    'org.gnome.shell.extensions.claude-usage-tracker',
-    Secret.SchemaFlags.NONE,
-    {
-        'profile-id': Secret.SchemaAttributeType.STRING,
-        'key-type': Secret.SchemaAttributeType.STRING
-    }
-);
 
 const FALLBACK_DIR = GLib.build_filenamev([GLib.get_user_config_dir(), 'claude-usage-tracker']);
 const FALLBACK_FILE = GLib.build_filenamev([FALLBACK_DIR, 'secrets.json']);
 
+// Lazy-load libsecret to avoid hard dependency
+function getSecretModule() {
+    try {
+        return imports.gi.Secret;
+    } catch (e) {
+        return null;
+    }
+}
+
+function getSchema() {
+    const Secret = getSecretModule();
+    if (!Secret) return null;
+    try {
+        return new Secret.Schema(
+            'org.gnome.shell.extensions.claude-usage-tracker',
+            Secret.SchemaFlags.NONE,
+            {
+                'profile-id': Secret.SchemaAttributeType.STRING,
+                'key-type': Secret.SchemaAttributeType.STRING
+            }
+        );
+    } catch (e) {
+        log(`ClaudeUsage: Failed to create libsecret schema: ${e.message}`);
+        return null;
+    }
+}
+
 export class SecretStore {
     constructor() {
-        this._useSecret = true;
+        this._useSecret = !!getSecretModule() && !!getSchema();
         this._ensureFallbackDir();
     }
 
@@ -36,7 +53,7 @@ export class SecretStore {
     async store(profileId, keyType, value) {
         if (this._useSecret) {
             try {
-                await this._secretStore(SCHEMA, { 'profile-id': profileId, 'key-type': keyType }, Secret.COLLECTION_DEFAULT, `Claude Usage Tracker - ${keyType} (${profileId})`, value);
+                await this._secretStore(getSchema(), { 'profile-id': profileId, 'key-type': keyType }, getSecretModule().COLLECTION_DEFAULT, `Claude Usage Tracker - ${keyType} (${profileId})`, value);
                 return;
             } catch (e) {
                 log(`ClaudeUsage: libsecret store failed, falling back to file: ${e.message}`);
@@ -49,7 +66,7 @@ export class SecretStore {
     async lookup(profileId, keyType) {
         if (this._useSecret) {
             try {
-                const password = await this._secretLookup(SCHEMA, { 'profile-id': profileId, 'key-type': keyType });
+                const password = await this._secretLookup(getSchema(), { 'profile-id': profileId, 'key-type': keyType });
                 return password;
             } catch (e) {
                 log(`ClaudeUsage: libsecret lookup failed, falling back to file: ${e.message}`);
@@ -62,7 +79,7 @@ export class SecretStore {
     async clear(profileId, keyType) {
         if (this._useSecret) {
             try {
-                await this._secretClear(SCHEMA, { 'profile-id': profileId, 'key-type': keyType });
+                await this._secretClear(getSchema(), { 'profile-id': profileId, 'key-type': keyType });
                 return;
             } catch (e) {
                 this._useSecret = false;
@@ -79,6 +96,7 @@ export class SecretStore {
     }
 
     _secretStore(schema, attributes, collection, label, password) {
+        const Secret = getSecretModule();
         return new Promise((resolve, reject) => {
             Secret.password_store(schema, attributes, collection, label, password, null, (source, result) => {
                 try {
@@ -92,6 +110,7 @@ export class SecretStore {
     }
 
     _secretLookup(schema, attributes) {
+        const Secret = getSecretModule();
         return new Promise((resolve, reject) => {
             Secret.password_lookup(schema, attributes, null, (source, result) => {
                 try {
@@ -105,6 +124,7 @@ export class SecretStore {
     }
 
     _secretClear(schema, attributes) {
+        const Secret = getSecretModule();
         return new Promise((resolve, reject) => {
             Secret.password_clear(schema, attributes, null, (source, result) => {
                 try {
@@ -124,7 +144,6 @@ export class SecretStore {
             data[profileId][keyType] = value;
             this._writeFallbackFile(data);
             const file = Gio.File.new_for_path(FALLBACK_FILE);
-            // Best effort chmod 0600
             try {
                 GLib.spawn_command_line_sync(`chmod 600 "${FALLBACK_FILE}"`);
             } catch {}
