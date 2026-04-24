@@ -33,6 +33,7 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
 
         // Profile list group (dynamic)
         this._profileGroup = new Adw.PreferencesGroup({ title: 'Profiles' });
+        this._profileRows = [];
         page.add(this._profileGroup);
         this._refreshProfileList();
 
@@ -47,23 +48,22 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
 
         // Credentials group for active profile (dynamic)
         this._credentialsGroup = new Adw.PreferencesGroup({ title: 'Credentials' });
+        this._credentialRows = [];
         page.add(this._credentialsGroup);
         this._buildCredentialsSection();
 
         this._window.add(page);
     }
 
-    _clearGroup(group) {
-        let child = group.get_first_child();
-        while (child) {
-            const next = child.get_next_sibling();
-            group.remove(child);
-            child = next;
+    _removeTrackedRows(group, rows) {
+        for (const row of rows) {
+            group.remove(row);
         }
+        rows.length = 0;
     }
 
     _refreshProfileList() {
-        this._clearGroup(this._profileGroup);
+        this._removeTrackedRows(this._profileGroup, this._profileRows);
 
         for (const profile of this._profileManager.profiles) {
             const row = new Adw.ActionRow({ title: profile.name });
@@ -94,11 +94,12 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
             }
 
             this._profileGroup.add(row);
+            this._profileRows.push(row);
         }
     }
 
     _buildCredentialsSection() {
-        this._clearGroup(this._credentialsGroup);
+        this._removeTrackedRows(this._credentialsGroup, this._credentialRows);
 
         const profile = this._profileManager.activeProfile;
         if (!profile) return;
@@ -118,6 +119,7 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
             }
         });
         this._credentialsGroup.add(sessionRow);
+        this._credentialRows.push(sessionRow);
 
         // Organization ID (optional, auto-fetched)
         const orgRow = new Adw.EntryRow({ title: 'Organization ID (optional)', show_apply_button: true });
@@ -127,6 +129,7 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
             this._showToast('Organization ID saved');
         });
         this._credentialsGroup.add(orgRow);
+        this._credentialRows.push(orgRow);
 
         // API Console key
         const apiRow = new Adw.PasswordEntryRow({ title: 'API Console Session Key', show_apply_button: true });
@@ -136,6 +139,7 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
             this._showToast('API key saved');
         });
         this._credentialsGroup.add(apiRow);
+        this._credentialRows.push(apiRow);
 
         // API Org ID
         const apiOrgRow = new Adw.EntryRow({ title: 'API Console Organization ID', show_apply_button: true });
@@ -145,6 +149,7 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
             this._showToast('API org ID saved');
         });
         this._credentialsGroup.add(apiOrgRow);
+        this._credentialRows.push(apiOrgRow);
 
         // CLI Sync
         const cliRow = new Adw.ActionRow({ title: 'Claude Code CLI' });
@@ -163,6 +168,7 @@ export default class ClaudeUsagePreferences extends ExtensionPreferences {
         cliRow.add_suffix(cliSyncBtn);
         cliRow.add_suffix(cliRemoveBtn);
         this._credentialsGroup.add(cliRow);
+        this._credentialRows.push(cliRow);
     }
 
     _buildAppearancePage() {
