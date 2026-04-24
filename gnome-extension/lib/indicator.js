@@ -14,15 +14,39 @@ export const ClaudeIndicator = GObject.registerClass(
             this._settings = extension.settings;
             this._profileManager = extension.profileManager;
 
-            this._box = new St.BoxLayout({ style_class: 'claude-panel-label', y_align: Clutter.ActorAlign.CENTER });
+            this._box = new St.BoxLayout({
+                style_class: 'claude-panel-label',
+                y_align: Clutter.ActorAlign.CENTER,
+                reactive: false
+            });
             this.add_child(this._box);
 
-            this._icon = new St.Icon({ style_class: 'system-status-icon', icon_name: 'user-available-symbolic' });
-            this._label = new St.Label({ text: '—', y_align: Clutter.ActorAlign.CENTER });
+            this._icon = new St.Icon({
+                style_class: 'system-status-icon',
+                icon_name: 'user-available-symbolic',
+                reactive: false
+            });
+            this._label = new St.Label({
+                text: '—',
+                y_align: Clutter.ActorAlign.CENTER,
+                reactive: false
+            });
 
             this._box.add_child(this._icon);
             this._box.add_child(this._label);
 
+            // Fallback click handler in case Clutter.ClickGesture doesn't fire
+            this.connect('button-press-event', (_actor, event) => {
+                log('ClaudeUsage: button-press-event fired');
+                if (this.menu) {
+                    this.menu.toggle();
+                } else {
+                    log('ClaudeUsage: menu is null!');
+                }
+                return Clutter.EVENT_STOP;
+            });
+
+            log(`ClaudeUsage: Indicator created, menu=${this.menu ? 'yes' : 'null'}`);
             this._updateIcon();
         }
 
