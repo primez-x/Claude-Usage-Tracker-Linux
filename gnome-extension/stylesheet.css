@@ -1,0 +1,166 @@
+/* Claude Usage Tracker - GNOME Shell Extension Styles */
+
+/* Popup Menu */
+.claude-usage-popup {
+    max-width: 380px;
+    padding: 12px;
+}
+
+.claude-usage-header {
+    font-weight: bold;
+    font-size: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+    margin-bottom: 8px;
+}
+
+.claude-usage-row {
+    spacing: 8px;
+    padding: 6px 0;
+}
+
+.claude-usage-label {
+    font-size: 13px;
+    min-width: 100px;
+}
+
+.claude-usage-value {
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Progress bars */
+.claude-progress-bar {
+    height: 8px;
+    border-radius: 4px;
+    background-color: rgba(128, 128, 128, 0.2);
+    min-width: 160px;
+}
+
+.claude-progress-fill {
+    height: 8px;
+    border-radius: 4px;
+}
+
+.claude-progress-fill.safe {
+    background-color: #2ec27e;
+}
+
+.claude-progress-fill.moderate {
+    background-color: #ff7800;
+}
+
+.claude-progress-fill.critical {
+    background-color: #e01b24;
+}
+
+/* Status colors */
+.claude-status-safe {
+    color: #2ec27e;
+}
+
+.claude-status-moderate {
+    color: #ff7800;
+}
+
+.claude-status-critical {
+    color: #e01b24;
+}
+
+/* Section headers */
+.claude-section-header {
+    font-size: 12px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7);
+    padding-top: 12px;
+    padding-bottom: 4px;
+}
+
+/* Buttons */
+.claude-button {
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.claude-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Error banner */
+.claude-error-banner {
+    background-color: rgba(224, 27, 36, 0.15);
+    border-radius: 6px;
+    padding: 8px;
+    margin: 4px 0;
+    font-size: 12px;
+    color: #ff7800;
+}
+
+/* Stale data warning */
+.claude-stale-banner {
+    background-color: rgba(255, 120, 0, 0.15);
+    border-radius: 6px;
+    padding: 8px;
+    margin: 4px 0;
+    font-size: 12px;
+    color: #ff7800;
+}
+
+/* Profile selector */
+.claude-profile-selector {
+    min-width: 200px;
+}
+
+/* Pace markers */
+.claude-pace-comfortable { color: #2ec27e; }
+.claude-pace-ontrack     { color: #33b1ff; }
+.claude-pace-warming     { color: #f8e45c; }
+.claude-pace-pressing    { color: #ff7800; }
+.claude-pace-critical    { color: #e01b24; }
+.claude-pace-runaway     { color: #c061cb; }
+
+/* Panel indicator */
+.claude-panel-label {
+    font-family: monospace;
+    font-size: 13px;
+    padding: 0 4px;
+}
+
+/* Separator */
+.claude-separator {
+    height: 1px;
+    background-color: rgba(128, 128, 128, 0.3);
+    margin: 8px 0;
+}
+
+/* Reset time text */
+.claude-reset-time {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* API cost card */
+.claude-cost-card {
+    background-color: rgba(128, 128, 128, 0.1);
+    border-radius: 8px;
+    padding: 10px;
+    margin: 4px 0;
+}
+
+.claude-cost-amount {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Multi-profile indicator */
+.claude-multi-profile {
+    spacing: 4px;
+}
+
+.claude-profile-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}

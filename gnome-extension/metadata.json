@@ -1,0 +1,10 @@
+{
+  "uuid": "claude-usage-tracker@hamed-elfayome.github.io",
+  "name": "Claude Usage Tracker",
+  "description": "Real-time Claude AI usage monitoring in your GNOME panel. Track session, weekly, Opus, and Sonnet usage with multi-profile support.",
+  "version": 1,
+  "shell-version": ["50"],
+  "url": "https://github.com/hamed-elfayome/Claude-Usage-Tracker",
+  "settings-schema": "org.gnome.shell.extensions.claude-usage-tracker",
+  "gettext-domain": "claude-usage-tracker"
+}

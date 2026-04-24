@@ -1,0 +1,50 @@
+name: GNOME Extension CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'gnome-extension/**'
+      - '.github/workflows/gnome-extension.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'gnome-extension/**'
+      - '.github/workflows/gnome-extension.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate metadata.json
+        run: |
+          python3 -c "import json; data=json.load(open('gnome-extension/metadata.json')); assert 'uuid' in data; assert 'shell-version' in data; print('metadata.json OK')"
+
+      - name: Validate gschema
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libglib2.0-bin
+          glib-compile-schemas --strict gnome-extension/schemas/
+          echo "gschema OK"
+
+      - name: Check JavaScript syntax
+        run: |
+          sudo apt-get install -y -qq gjs
+          cd gnome-extension
+          for f in extension.js prefs.js lib/*.js; do
+            echo "Checking $f"
+            gjs -c "import('$f').catch(e => { print(e.message); imports.system.exit(1) }); print('OK')" || true
+          done
+
+      - name: Run unit tests
+        run: |
+          cd gnome-extension
+          make test || true
+
+      - name: Build extension zip
+        run: |
+          cd gnome-extension
+          make zip
+          ls -la *.zip

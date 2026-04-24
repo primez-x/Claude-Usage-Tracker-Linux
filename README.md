@@ -3,11 +3,14 @@
 <div align="center">
   <img src=".github/cover.jpg" alt="Claude Usage Tracker" width="100%">
 
-  **A native macOS menu bar application for real-time monitoring of Claude AI usage limits**
+  **A native macOS menu bar & GNOME Shell extension for real-time monitoring of Claude AI usage limits**
 
   ![macOS](https://img.shields.io/badge/macOS-14.0+-black?style=flat-square&logo=apple)
+  ![Linux](https://img.shields.io/badge/Linux-Ubuntu%2026.04+-e95420?style=flat-square&logo=ubuntu)
+  ![GNOME](https://img.shields.io/badge/GNOME-50-4a86cf?style=flat-square&logo=gnome)
   ![Swift](https://img.shields.io/badge/Swift-5.0+-orange?style=flat-square&logo=swift)
   ![SwiftUI](https://img.shields.io/badge/SwiftUI-5.0+-blue?style=flat-square&logo=swift)
+  ![GJS](https://img.shields.io/badge/GJS-ESM-yellow?style=flat-square)
   ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
   ![Version](https://img.shields.io/badge/version-3.1.1-blue?style=flat-square)
   ![Languages](https://img.shields.io/badge/languages-13-purple?style=flat-square)
@@ -25,7 +28,7 @@
 
 ## Overview
 
-Claude Usage Tracker is a lightweight, native macOS menu bar application that provides real-time monitoring of your Claude AI usage limits. Built entirely with Swift and SwiftUI, it offers a clean, intuitive interface to track your 5-hour session window, weekly usage limits, and Opus-specific consumption.
+Claude Usage Tracker is a lightweight, native application that provides real-time monitoring of your Claude AI usage limits. The macOS version is built entirely with Swift and SwiftUI, while the Linux version is a native GNOME Shell extension written in GJS. Both offer a clean, intuitive interface to track your 5-hour session window, weekly usage limits, and Opus-specific consumption.
 
 ### Key Capabilities
 
@@ -78,9 +81,16 @@ Claude Usage Tracker is a lightweight, native macOS menu bar application that pr
 
 ## Getting Started
 
-### Prerequisites
+Pick your platform:
 
-Before installing Claude Usage Tracker, ensure you have:
+- [macOS Installation](#macos)
+- [Linux / GNOME Installation](#linux--gnome)
+
+---
+
+## macOS
+
+### Prerequisites
 
 - **macOS 14.0 (Sonoma) or later** - Check: Apple menu → About This Mac
 - **Active Claude AI account** - Sign up at [claude.ai](https://claude.ai)
@@ -162,6 +172,100 @@ open "Claude Usage.xcodeproj"
 
 # Build and run (⌘R)
 ```
+
+---
+
+## Linux / GNOME
+
+**Requirements**: Ubuntu 26.04+ (or any distribution with GNOME 50+), [Extension Manager](https://flathub.org/apps/com.mattjakeman.ExtensionManager) (recommended)
+
+> **What is Extension Manager?** It's a desktop app (available on Flathub) that lets you browse, install, and configure GNOME extensions. Think of it as the "App Store" for GNOME Shell extensions.
+>
+> ```bash
+> flatpak install flathub com.mattjakeman.ExtensionManager
+> ```
+
+### Installation
+
+#### Option 1: Extension Manager (Recommended — one-click install)
+
+Once the extension is published to extensions.gnome.org:
+
+1. Open **Extension Manager**
+2. Click the **Browse** tab
+3. Search for **"Claude Usage Tracker"**
+4. Click **Install**
+5. Click the ⚙️ **Settings** button next to the extension
+6. Enter your credentials (see [Configuration](#linux-configuration) below)
+
+#### Option 2: Install from GitHub Release
+
+1. Download `claude-usage-tracker@hamed-elfayome.github.io.ego.zip` from the [latest release](https://github.com/hamed-elfayome/Claude-Usage-Tracker/releases/latest)
+2. Open **Extension Manager**
+3. Click **+** (Install from File)
+4. Select the downloaded `.zip`
+5. Enter your credentials (see [Configuration](#linux-configuration) below)
+
+#### Option 3: Manual install from source
+
+```bash
+git clone https://github.com/hamed-elfayome/Claude-Usage-Tracker.git
+cd Claude-Usage-Tracker/gnome-extension
+make install
+```
+
+Then restart GNOME Shell:
+- **X11**: Press `Alt+F2`, type `r`, press `Enter`
+- **Wayland**: Log out and log back in
+
+Finally, enable the extension:
+```bash
+gnome-extensions enable claude-usage-tracker@hamed-elfayome.github.io
+```
+
+**To uninstall**:
+```bash
+cd Claude-Usage-Tracker/gnome-extension
+make uninstall
+```
+
+#### Option 4: Build your own zip
+
+```bash
+cd Claude-Usage-Tracker/gnome-extension
+make release
+# Produces: claude-usage-tracker@hamed-elfayome.github.io.ego.zip
+```
+
+### Linux Configuration
+
+After installation, you must configure credentials before usage appears:
+
+1. Open **Extension Manager** → find **Claude Usage Tracker** → click **Settings**
+2. Go to the **Profiles** tab
+3. Enter your **Claude.ai Session Key**:
+   - Open [claude.ai](https://claude.ai) in your browser
+   - Open DevTools (F12) → **Application** (Chrome/Edge) or **Storage** (Firefox) → **Cookies** → `https://claude.ai`
+   - Find the `sessionKey` cookie and copy its value (starts with `sk-ant-sid01-...`)
+   - Paste it into the **Claude.ai Session Key** field and press Enter
+4. (Optional) Enter **API Console Session Key** for billing/cost tracking
+5. (Optional) Click **Sync** next to **Claude Code CLI** to import CLI credentials
+6. The panel indicator will appear immediately with live usage data
+
+### Updating on Linux
+
+- **If installed via Extension Manager from EGO**: Updates are automatic
+- **If installed from GitHub Release / source**: Re-download and reinstall, or run `make install` again
+
+### Troubleshooting Linux
+
+| Problem | Solution |
+|---------|----------|
+| Extension shows "No credentials configured" | Open Settings and paste your session key |
+| Indicator not appearing after install | Restart GNOME Shell (Alt+F2 → `r`) or log out/in |
+| "Unauthorized" error | Your session key expired — extract a fresh one from browser cookies |
+| Settings won't open | Ensure `glib-compile-schemas` ran during install |
+| Extension Manager can't find it | The extension is not yet on EGO — use "Install from File" instead |
 
 ### Quick Start Guide
 
@@ -671,13 +775,23 @@ Sonnet │ Ctx: 96K │ Usage: 25%
 
 ### Technology Stack
 
+**macOS**
 - **Language**: Swift 5.0+
 - **UI Framework**: SwiftUI 5.0+
 - **Platform**: macOS 14.0+ (Sonoma)
 - **Architecture**: MVVM with Protocol-Oriented Design
-- **Storage**: UserDefaults with App Groups
+- **Storage**: UserDefaults with App Groups / Keychain
 - **Networking**: URLSession with async/await
 - **Design Patterns**: Coordinator pattern, Protocol-based services, Modular components
+
+**Linux / GNOME**
+- **Language**: JavaScript (GJS) with ESM
+- **UI Framework**: GTK4 + libadwaita (prefs), St (Shell Toolkit) for panel
+- **Platform**: GNOME 50+ (Ubuntu 26.04+, Fedora 42+, etc.)
+- **Architecture**: Service-based with async Soup3 HTTP client
+- **Storage**: GSettings (gschema) + libsecret with file fallback
+- **Networking**: Soup.Session (libsoup3)
+- **Package Format**: GNOME Shell Extension (zip) for Extension Manager
 
 ## API Integration
 
@@ -779,6 +893,53 @@ If automatic updates aren't working:
 2. Verify you're running v2.0.0 or later (earlier versions don't have auto-update)
 3. Check your internet connection
 4. Manually download the latest version from GitHub if needed
+
+### Linux / GNOME Specific
+
+**Extension not appearing in panel after install**
+- Ensure the extension is enabled: `gnome-extensions enable claude-usage-tracker@hamed-elfayome.github.io`
+- Restart GNOME Shell: `Alt+F2` → type `r` → Enter (X11 only) or log out/in (Wayland)
+- Check GNOME Logs: `journalctl -f -o cat /usr/bin/gnome-shell` and look for "ClaudeUsage" messages
+
+**"No credentials configured" error**
+- The extension requires a session key to function
+- Open Extension Manager → Claude Usage Tracker → Settings → Profiles
+- Paste your `sessionKey` cookie from claude.ai
+
+**Settings window won't open**
+- Make sure `glib-compile-schemas` ran during installation
+- Re-run `make install` from the `gnome-extension/` directory
+
+**Indicator shows stale data**
+- Click the refresh button in the popup menu
+- Check that your session key hasn't expired
+- Verify internet connectivity
+
+## Publishing the GNOME Extension
+
+If you are a maintainer looking to publish or update the GNOME extension:
+
+### Submit to extensions.gnome.org (EGO)
+
+This is the standard distribution channel that makes the extension discoverable in Extension Manager.
+
+```bash
+cd gnome-extension
+make release
+# Upload the resulting *.ego.zip to https://extensions.gnome.org/upload/
+```
+
+Full instructions: [`gnome-extension/docs/DISTRIBUTION.md`](gnome-extension/docs/DISTRIBUTION.md)
+
+### Publish a GitHub Release
+
+```bash
+git tag -a gnome-v1.0.0 -m "GNOME extension v1.0.0"
+git push origin gnome-v1.0.0
+# Then attach gnome-extension/*.ego.zip to the drafted release on GitHub
+```
+
+---
 
 ## Contributors
 

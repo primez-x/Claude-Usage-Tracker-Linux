@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.claude-usage-tracker"
+          path="/org/gnome/shell/extensions/claude-usage-tracker/">
+
+    <!-- Core Settings -->
+    <key name="refresh-interval" type="i">
+      <default>60</default>
+      <summary>Refresh interval in seconds</summary>
+      <description>How often to fetch usage data from Claude API</description>
+    </key>
+
+    <key name="active-profile-id" type="s">
+      <default>""</default>
+      <summary>Currently active profile ID</summary>
+      <description>UUID of the profile currently being tracked</description>
+    </key>
+
+    <key name="profiles-json" type="s">
+      <default>"[]"</default>
+      <summary>Profiles data</summary>
+      <description>JSON array of profile metadata (no secrets stored here)</description>
+    </key>
+
+    <!-- Appearance -->
+    <key name="icon-style" type="s">
+      <default>"battery"</default>
+      <summary>Panel icon style</summary>
+      <description>battery, bar, percentage, compact, or icon-bar</description>
+    </key>
+
+    <key name="color-mode" type="s">
+      <default>"multiColor"</default>
+      <summary>Color mode</summary>
+      <description>multiColor, monochrome, or singleColor</description>
+    </key>
+
+    <key name="single-color-hex" type="s">
+      <default>"#00BFFF"</default>
+      <summary>Single color hex</summary>
+      <description>Custom color when singleColor mode is active</description>
+    </key>
+
+    <key name="show-percentage" type="b">
+      <default>true</default>
+      <summary>Show percentage in panel</summary>
+    </key>
+
+    <key name="show-remaining-percentage" type="b">
+      <default>false</default>
+      <summary>Show remaining instead of used percentage</summary>
+    </key>
+
+    <key name="multi-profile-mode" type="b">
+      <default>false</default>
+      <summary>Display multiple profiles in panel</summary>
+    </key>
+
+    <!-- Notifications -->
+    <key name="notification-thresholds" type="s">
+      <default>"[75,90,95]"</default>
+      <summary>Notification thresholds</summary>
+      <description>JSON array of percentage thresholds that trigger notifications</description>
+    </key>
+
+    <key name="notifications-enabled" type="b">
+      <default>true</default>
+      <summary>Enable notifications</summary>
+    </key>
+
+    <!-- Behavior -->
+    <key name="auto-switch-profile" type="b">
+      <default>false</default>
+      <summary>Auto-switch profile on limit</summary>
+      <description>Automatically switch to next profile when session limit reached</description>
+    </key>
+
+    <key name="statusline-enabled" type="b">
+      <default>true</default>
+      <summary>Write statusline cache</summary>
+      <description>Write usage data to ~/.claude/usage-cache.json for terminal integration</description>
+    </key>
+
+    <key name="check-overage-limit" type="b">
+      <default>true</default>
+      <summary>Check overage limit</summary>
+      <description>Fetch overage spend limit and credit grant data</description>
+    </key>
+
+    <!-- Window State -->
+    <key name="prefs-width" type="i">
+      <default>720</default>
+      <summary>Preferences window width</summary>
+    </key>
+
+    <key name="prefs-height" type="i">
+      <default>750</default>
+      <summary>Preferences window height</summary>
+    </key>
+
+  </schema>
+</schemalist>
