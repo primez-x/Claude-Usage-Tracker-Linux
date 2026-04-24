@@ -229,7 +229,8 @@ export class ClaudeAPIService {
         if (profile.hasValidCLIOAuth) {
             try {
                 const creds = JSON.parse(profile.cliCredentialsJSON);
-                if (creds.access_token) return { type: 'oauth', value: creds.access_token };
+                const token = creds.claudeAiOauth?.accessToken ?? creds.access_token;
+                if (token) return { type: 'oauth', value: token };
             } catch {}
         }
 
@@ -239,7 +240,8 @@ export class ClaudeAPIService {
             if (systemCreds) {
                 try {
                     const creds = JSON.parse(systemCreds);
-                    if (creds.access_token) return { type: 'oauth', value: creds.access_token };
+                    const token = creds.claudeAiOauth?.accessToken ?? creds.access_token;
+                    if (token) return { type: 'oauth', value: token };
                 } catch {}
             }
         } catch (e) {

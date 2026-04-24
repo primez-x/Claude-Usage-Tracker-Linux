@@ -196,15 +196,16 @@ export class Profile {
     }
 
     get hasUsageCredentials() {
-        return this.hasClaudeAI || this.hasAPIConsole || this.hasValidCLIOAuth;
+        return !!this.claudeSessionKey || this.hasAPIConsole || this.hasValidCLIOAuth;
     }
 
     get hasValidCLIOAuth() {
         if (!this.cliCredentialsJSON) return false;
         try {
             const creds = JSON.parse(this.cliCredentialsJSON);
-            if (!creds.expires_at) return false;
-            return new Date(creds.expires_at) > new Date();
+            const expiresAt = creds.claudeAiOauth?.expiresAt ?? creds.expires_at;
+            if (!expiresAt) return false;
+            return new Date(expiresAt) > new Date();
         } catch {
             return false;
         }
